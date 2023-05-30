@@ -3,18 +3,26 @@ const CommonError = require('../errors/common-err');
 const nodemailer = require("nodemailer");
 require('dotenv').config();
 
+// // create reusable transporter object using the default SMTP transport
+// let transporter = nodemailer.createTransport({
+//   host: "smtp.mail.ru",
+//   port: 465,
+//   secure: true, // true for 465, false for other ports
+//   auth: {
+//     user: process.env.EMAIL, // generated ethereal user
+//     pass: process.env.PASSWORD, // generated ethereal password
+//   },
+// });
 
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: "smtp.mail.ru",
-    port: 465,
-    secure: true, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL, // generated ethereal user
-      pass: process.env.PASSWORD, // generated ethereal password
-    },
-  });
-
+const transporter = nodemailer.createTransport({
+  host: 'smtp.mail.ru',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
+  }
+});
 
 const sendOrder = async (req, res, next) => {
   //let testAccount = await nodemailer.createTestAccount();
@@ -22,7 +30,7 @@ const sendOrder = async (req, res, next) => {
 
   // send mail with defined transport object
   return transporter.sendMail({
-    from: '"FAVORIT" <fornodemailsender@mail.ru>', // sender address
+    from: 'fornodemailsender@mail.ru', // sender address
     // to: "favorit_relax_tourism@mail.ru", // list of receivers
     to: "ndthwm@yandex.ru",
     subject: "Заказ", // Subject line

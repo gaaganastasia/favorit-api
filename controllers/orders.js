@@ -35,6 +35,14 @@ const sendOrder = async (req, res, next) => {
     to: "ndthwm@yandex.ru",
     subject: "Заказ", // Subject line
     text: text, // plain text body
+  }, (error, info) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send('Ошибка при отправке почты');
+    } else {
+      console.log(`Email sent: ${info.response}`);
+      res.send('Заказ успешно отправлен');
+    }
   })
     .then(() => {
       res.send({ message: "OK"});

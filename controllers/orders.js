@@ -1,6 +1,7 @@
 const NotFoundError = require('../errors/not-found-err');
 const CommonError = require('../errors/common-err');
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
+const sendmailTransport = require('nodemailer-sendmail-transport');
 require('dotenv').config();
 
 // // create reusable transporter object using the default SMTP transport
@@ -14,6 +15,17 @@ require('dotenv').config();
 //   },
 // });
 
+// let transporter = nodemailer.createTransport({
+//   host: 'smtp.mail.ru',
+//   port: 465,
+//   secure: true,
+//   auth: {
+//       user: process.env.EMAIL,
+//       pass: process.env.PASSWORD
+//   }
+// });
+
+
 const transporter = nodemailer.createTransport({
   host: 'smtp.mail.ru',
   port: 465,
@@ -24,9 +36,13 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// const transporter = nodemailer.createTransport(sendmailTransport());
+
+
 const sendOrder = async (req, res, next) => {
   //let testAccount = await nodemailer.createTestAccount();
   const { text } = req.body;
+  console.log(transporter)
 
   // send mail with defined transport object
   return transporter.sendMail({
@@ -35,14 +51,6 @@ const sendOrder = async (req, res, next) => {
     to: "ndthwm@yandex.ru",
     subject: "Заказ", // Subject line
     text: text, // plain text body
-  }, (error, info) => {
-    if (error) {
-      console.error(error);
-      res.status(500).send('Ошибка при отправке почты');
-    } else {
-      console.log(`Email sent: ${info.response}`);
-      res.send('Заказ успешно отправлен');
-    }
   })
     .then(() => {
       res.send({ message: "OK"});
